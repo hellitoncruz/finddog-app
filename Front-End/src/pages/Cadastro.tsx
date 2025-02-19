@@ -1,21 +1,33 @@
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "axios";
+import '../styles.scss'
 
-function Cadastro() {
-  const { register, handleSubmit } = useForm();
+type Inputs = {
+  nome: string,
+  localizacao: string,
+};
 
-  const onSubmit = (data: any) => {
-    console.log("Formulário enviado!");
-    console.log(data);
-  };
+export default function Cadastro() {
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:5000/animais', data);
+      console.log("Formulario enviado com sucesso", response.data)
+    } catch (error) {
+      console.error("Erro ao enviar formulario: ", error)
+    }
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("primeiro_nome", { required: true, maxLength: 20 })} />
-      <input {...register("ultimo_nome", { maxLength: 20 })} />
-      <input type="number" {...register("idade", { min: 18, max: 99 })} />
-      <button type="submit">Enviar</button>
+    <div className="container">
+    < form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("nome", { required: true })} />
+
+      <input {...register("localizacao", { required: true })} />
+      {errors.nome || errors.localizacao ? <span>Preencha o campo, por favor!</span> : ''}
+
+      <input type="submit" />
     </form>
+    </div>
   );
 }
-
-export default Cadastro;

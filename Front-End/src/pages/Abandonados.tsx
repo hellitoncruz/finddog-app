@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import './App.css'
 import axios from 'axios'
+import '../styles.scss'
 
 type Animal = {
   _id: string;
@@ -10,7 +10,7 @@ type Animal = {
   dataRegistro: string;
 }
 
-function App() {
+function Abandonados() {
   const [animals, setAnimals] = useState<Animal[]>([])
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function App() {
   },[])
 
   return (
-    <div>
+    <div className='container'>
       {animals?.map((animal: any) => (
         <div key={animal._id}>
           <h1>{animal.nome}</h1>
@@ -33,4 +33,4 @@ function App() {
   )
 }
 
-export default App
+export default Abandonados
